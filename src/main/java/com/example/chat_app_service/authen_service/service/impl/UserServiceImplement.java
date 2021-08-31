@@ -68,7 +68,7 @@ public class UserServiceImplement implements UserService {
         this.emailService = emailService;
     }
 
-    private String addAccount(CreateAccountRequest createAccountRequest) {
+    private String addAccount(CreateAccountRequest createAccountRequest){
         ApplicationUser applicationUser = new ApplicationUser();
         applicationUser.setCreateAccountRequest(createAccountRequest);
         applicationUserRepository.save(applicationUser);
@@ -149,7 +149,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public ResponseEntity<GeneralResponse<Object>> signupAccount(CreateAccountRequest createAccountRequest, HttpServletRequest request){
+    public ResponseEntity<GeneralResponse<Object>> signupAccount(CreateAccountRequest createAccountRequest, HttpServletRequest request) {
         ResponseEntity<GeneralResponse<Object>> validateResult = validateSignUp(createAccountRequest);
         if (validateResult != null) return validateResult;
         validateResult = validationService.validExist(createAccountRequest.getUsername(), createAccountRequest.getEmail());

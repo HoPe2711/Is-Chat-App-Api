@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,7 +29,7 @@ public class ApplicationUser implements Serializable {
     @JsonIgnore
     private String password;
     private String displayName;
-    private String avatar;
+    private Binary avatar;
     private String email;
     private boolean status;
 
@@ -40,7 +41,6 @@ public class ApplicationUser implements Serializable {
         this.username = createAccountRequest.getUsername();
         this.password = createAccountRequest.getPassword();
         this.displayName = createAccountRequest.getDisplayName();
-        this.avatar = createAccountRequest.getAvatar();
         this.email = createAccountRequest.getEmail();
         this.status = false;
     }

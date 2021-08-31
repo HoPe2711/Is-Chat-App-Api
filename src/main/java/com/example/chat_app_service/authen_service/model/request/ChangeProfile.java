@@ -8,6 +8,4 @@ import javax.validation.constraints.NotBlank;
 public class ChangeProfile {
     @NotBlank
     private String displayName;
-    @NotBlank
-    private String avatar;
 }

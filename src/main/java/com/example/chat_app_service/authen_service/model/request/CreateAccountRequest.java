@@ -15,8 +15,6 @@ public class CreateAccountRequest {
     @NotBlank
     private  String displayName;
     @NotBlank
-    private String avatar;
-    @NotBlank
     private  String email;
 
 }

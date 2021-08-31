@@ -1,7 +1,6 @@
 package com.example.chat_app_service.authen_service.controller;
 
 import com.example.chat_app_service.authen_service.model.request.ChangePasswordRequest;
-import com.example.chat_app_service.authen_service.model.request.ChangeProfile;
 import com.example.chat_app_service.authen_service.service.ProfileService;
 import com.example.chat_app_service.authen_service.service.UserService;
 import com.example.chat_app_service.response.GeneralResponse;
@@ -9,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @CrossOrigin(value = "*")
 @Slf4j
@@ -35,9 +37,9 @@ public class UserAuthController {
         return profileService.getProfile(userId);
     }
 
-    @PutMapping("/profile")
-    public ResponseEntity<GeneralResponse<Object>> changeProfile(@RequestBody ChangeProfile changeProfile){
-        return profileService.changeProfile(changeProfile);
+    @PutMapping(value = "/profile")
+    public ResponseEntity<GeneralResponse<Object>> changeProfile(@RequestParam("image")MultipartFile multipartFile, @RequestParam("displayName") String displayName) throws IOException {
+        return profileService.changeProfile(multipartFile, displayName);
     }
 
     @GetMapping("/find_user/{pattern}/{touch}")
@@ -45,6 +47,7 @@ public class UserAuthController {
                                                             @PathVariable(name="touch") int touch){
         return userService.findUser(pattern,touch);
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<GeneralResponse<Object>> logout(){
