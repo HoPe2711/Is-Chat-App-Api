@@ -3,10 +3,13 @@ package com.example.chat_app_service.chat_service.service.impl;
 import com.example.chat_app_service.authen_service.repository.ApplicationUserRepository;
 import com.example.chat_app_service.authen_service.repository.entities.ApplicationUser;
 import com.example.chat_app_service.chat_service.model.request.ChatMessageRequest;
+import com.example.chat_app_service.chat_service.model.request.ReactMessageRequest;
+import com.example.chat_app_service.chat_service.model.response.ReactMessageResponse;
 import com.example.chat_app_service.chat_service.repository.ChatMessageRepository;
 import com.example.chat_app_service.chat_service.repository.ChatRoomRepository;
 import com.example.chat_app_service.chat_service.repository.entities.ChatMessage;
 import com.example.chat_app_service.chat_service.repository.entities.ChatRoom;
+import com.example.chat_app_service.chat_service.repository.entities.React;
 import com.example.chat_app_service.chat_service.service.ChatService;
 import com.example.chat_app_service.chat_service.service.impl.internal.ChatMessageService;
 import com.example.chat_app_service.response.GeneralResponse;
@@ -73,6 +76,32 @@ public class ChatServiceImplement implements ChatService {
                       chatMessage
               );
           }
+    }
+
+    @Override
+    public void reactMessage(ReactMessageRequest reactMessageRequest){
+        ChatMessage chatMessage = chatMessageRepository.findById(reactMessageRequest.getChatId()).get();
+        React react = new React(reactMessageRequest.getSenderId(), reactMessageRequest.getSenderName(), reactMessageRequest.getEmotion());
+        React users = chatMessage.getReactList().stream().
+                filter(user -> react.getSenderId().equals(user.getSenderId()))
+                .findFirst().orElse(null);
+        int index = chatMessage.getReactList().indexOf(users);
+        if (users == null) chatMessage.getReactList().add(react);
+        else if (reactMessageRequest.getEmotion() == null) chatMessage.getReactList().remove(index);
+        else chatMessage.getReactList().set(index,react);
+
+        chatMessageRepository.save(chatMessage);
+        for (ApplicationUser applicationUser : chatMessage.getChatRoom().getUserList()){
+            messagingTemplate.convertAndSendToUser(
+                    applicationUser.getId(),"/queue/messages",
+                    new ReactMessageResponse(reactMessageRequest.getSenderId(),
+                            reactMessageRequest.getSenderName(),
+                            reactMessageRequest.getChatId(),
+                            chatMessage.getChatRoomId(),
+                            chatMessage.getChatRoomName(),
+                            reactMessageRequest.getEmotion())
+            );
+        }
     }
 
 }

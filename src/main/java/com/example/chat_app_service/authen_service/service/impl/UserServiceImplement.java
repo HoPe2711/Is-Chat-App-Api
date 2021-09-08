@@ -43,6 +43,8 @@ public class UserServiceImplement implements UserService {
     @Value("${token.ttl}")
     private Long ttl;
 
+    private final String defaultAva = "defaultAva.jpg";
+
     private final ApplicationUserRepository applicationUserRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -171,6 +173,7 @@ public class UserServiceImplement implements UserService {
         ApplicationUser applicationUser = applicationUserRepository.findById(userId).orElse(null);
         if (applicationUser == null) return ResponseFactory.error(HttpStatus.valueOf(400), ResponseStatusEnum.NOT_EXIST);
         applicationUser.setStatus(true);
+        applicationUser.setAvatar(defaultAva);
         applicationUserRepository.save(applicationUser);
         iRedisCaching.removeFromOpsValue(token);
         return ResponseFactory.success(applicationUser);

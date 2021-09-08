@@ -2,6 +2,7 @@ package com.example.chat_app_service.chat_service.controller;
 
 
 import com.example.chat_app_service.chat_service.model.request.ChatMessageRequest;
+import com.example.chat_app_service.chat_service.model.request.ReactMessageRequest;
 import com.example.chat_app_service.chat_service.service.ChatService;
 import com.example.chat_app_service.response.GeneralResponse;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class ChatController {
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessageRequest chatMessageRequest) {
         chatService.processMessage(chatMessageRequest);
+    }
+
+    @MessageMapping("/react")
+    public void reactMessage(@Payload ReactMessageRequest reactMessageRequest) {
+        chatService.reactMessage(reactMessageRequest);
     }
 
     @GetMapping("/chatHistory/{roomId}/{touch}")

@@ -12,7 +12,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -33,6 +35,7 @@ public class ChatMessage implements Serializable {
     private String content;
     private Long timestamp;
     private MessageStatus status;
+    private List<React> reactList = new ArrayList<>();
 
     public ChatMessage(ChatMessageRequest chatMessageRequest, ChatRoom chatRoom){
         this.senderId = chatMessageRequest.getSenderId();
