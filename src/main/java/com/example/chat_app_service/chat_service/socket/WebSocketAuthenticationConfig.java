@@ -2,7 +2,6 @@ package com.example.chat_app_service.chat_service.socket;
 
 import com.example.chat_app_service.authen_service.security.filter.JWT.JwtUtils;
 import com.example.chat_app_service.authen_service.security.filter.service.UserDetailsServiceImplement;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

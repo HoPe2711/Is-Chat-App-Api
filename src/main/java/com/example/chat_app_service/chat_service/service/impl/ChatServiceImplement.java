@@ -3,7 +3,9 @@ package com.example.chat_app_service.chat_service.service.impl;
 import com.example.chat_app_service.authen_service.repository.ApplicationUserRepository;
 import com.example.chat_app_service.authen_service.repository.entities.ApplicationUser;
 import com.example.chat_app_service.chat_service.model.request.ChatMessageRequest;
+import com.example.chat_app_service.chat_service.model.request.DeleteMessagaRequest;
 import com.example.chat_app_service.chat_service.model.request.ReactMessageRequest;
+import com.example.chat_app_service.chat_service.model.response.DeleteMessageResponse;
 import com.example.chat_app_service.chat_service.model.response.ReactMessageResponse;
 import com.example.chat_app_service.chat_service.repository.ChatMessageRepository;
 import com.example.chat_app_service.chat_service.repository.ChatRoomRepository;
@@ -26,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,12 +70,11 @@ public class ChatServiceImplement implements ChatService {
           ChatRoom chatRoom = chatRoomRepository.findById(chatMessageRequest.getChatRoomId()).get();
           ChatMessage chatMessage = new ChatMessage(chatMessageRequest,chatRoom);
           chatMessageService.save(chatMessage);
-          //System.out.println(chatMessageRequest.getSenderId());
           chatRoom.setChatRoomByChatMessage(chatMessage);
           chatRoomRepository.save(chatRoom);
           for (ApplicationUser applicationUser : chatRoom.getUserList()){
-              messagingTemplate.convertAndSendToUser(
-                      applicationUser.getId(),"/queue/messages",
+              messagingTemplate.convertAndSend(
+                      "/queue/" + applicationUser.getId(),
                       chatMessage
               );
           }
@@ -89,11 +91,10 @@ public class ChatServiceImplement implements ChatService {
         if (users == null) chatMessage.getReactList().add(react);
         else if (reactMessageRequest.getEmotion() == null) chatMessage.getReactList().remove(index);
         else chatMessage.getReactList().set(index,react);
-
         chatMessageRepository.save(chatMessage);
         for (ApplicationUser applicationUser : chatMessage.getChatRoom().getUserList()){
-            messagingTemplate.convertAndSendToUser(
-                    applicationUser.getId(),"/queue/messages",
+            messagingTemplate.convertAndSend(
+                    "/queue/" + applicationUser.getId(),
                     new ReactMessageResponse(reactMessageRequest.getSenderId(),
                             reactMessageRequest.getSenderName(),
                             reactMessageRequest.getChatId(),
@@ -104,4 +105,27 @@ public class ChatServiceImplement implements ChatService {
         }
     }
 
+    @Override
+    public void deleteMessage(DeleteMessagaRequest deleteMessagaRequest) {
+        ChatMessage chatMessage = chatMessageRepository.findById(deleteMessagaRequest.getChatId()).get();
+        if (chatMessage.getSenderId().equals(deleteMessagaRequest.getSenderId())){
+            for (ApplicationUser applicationUser : chatMessage.getChatRoom().getUserList()){
+                messagingTemplate.convertAndSend(
+                        "/queue/" + applicationUser.getId(),
+                        new DeleteMessageResponse(chatMessage.getSenderId(),
+                        chatMessage.getSenderName(),
+                        chatMessage.getId(),
+                        chatMessage.getChatRoomId(),
+                        chatMessage.getChatRoomName(),
+                        "delete")
+                );
+            }
+            ChatRoom chatRoom = chatRoomRepository.findById(chatMessage.getId()).get();
+            chatRoom.setSenderName(chatMessage.getSenderName());
+            chatRoom.setContent("One message is deleted by " + chatMessage.getSenderName());
+            chatRoom.setTimestamp(new Date().getTime());
+            chatRoomRepository.save(chatRoom);
+            chatMessageRepository.delete(chatMessage);
+        }
+    }
 }
