@@ -9,6 +9,7 @@ import com.example.chat_app_service.chat_service.service.RoomService;
 import com.example.chat_app_service.response.GeneralResponse;
 import com.example.chat_app_service.response.ResponseFactory;
 import com.example.chat_app_service.response.ResponseStatusEnum;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Slf4j

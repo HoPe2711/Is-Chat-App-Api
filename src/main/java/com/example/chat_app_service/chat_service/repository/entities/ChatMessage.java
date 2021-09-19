@@ -3,6 +3,10 @@ package com.example.chat_app_service.chat_service.repository.entities;
 import com.example.chat_app_service.chat_service.model.MessageStatus;
 import com.example.chat_app_service.chat_service.model.request.ChatMessageRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +14,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

@@ -11,4 +11,5 @@ public interface ChatService {
     void reactMessage(ReactMessageRequest reactMessageRequest);
     void deleteMessage(DeleteMessagaRequest deleteMessagaRequest);
     ResponseEntity<GeneralResponse<Object>> loadChatMessage(String roomId, int touch);
+    ResponseEntity<GeneralResponse<Object>> findChat(String roomId,int touch, String pattern);
 }

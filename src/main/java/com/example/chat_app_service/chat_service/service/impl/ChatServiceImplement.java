@@ -2,6 +2,7 @@ package com.example.chat_app_service.chat_service.service.impl;
 
 import com.example.chat_app_service.authen_service.repository.ApplicationUserRepository;
 import com.example.chat_app_service.authen_service.repository.entities.ApplicationUser;
+import com.example.chat_app_service.chat_service.elasticsearch.repository.ChatMessageSearchRepository;
 import com.example.chat_app_service.chat_service.model.request.ChatMessageRequest;
 import com.example.chat_app_service.chat_service.model.request.DeleteMessagaRequest;
 import com.example.chat_app_service.chat_service.model.request.ReactMessageRequest;
@@ -17,6 +18,8 @@ import com.example.chat_app_service.chat_service.service.impl.internal.ChatMessa
 import com.example.chat_app_service.response.GeneralResponse;
 import com.example.chat_app_service.response.ResponseFactory;
 import com.example.chat_app_service.response.ResponseStatusEnum;
+import java.util.Date;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,9 +31,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-
 @Service
 @Slf4j
 public class ChatServiceImplement implements ChatService {
@@ -39,14 +39,20 @@ public class ChatServiceImplement implements ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ApplicationUserRepository applicationUserRepository;
+    private final ChatMessageSearchRepository chatMessageSearchRepository;
 
     @Autowired
-    public ChatServiceImplement(SimpMessagingTemplate messagingTemplate, ChatMessageService chatMessageService, ChatRoomRepository chatRoomRepository, ChatMessageRepository chatMessageRepository, ApplicationUserRepository applicationUserRepository) {
+    public ChatServiceImplement(SimpMessagingTemplate messagingTemplate,
+        ChatMessageService chatMessageService, ChatRoomRepository chatRoomRepository,
+        ChatMessageRepository chatMessageRepository,
+        ApplicationUserRepository applicationUserRepository,
+        ChatMessageSearchRepository chatMessageSearchRepository) {
         this.messagingTemplate = messagingTemplate;
         this.chatMessageService = chatMessageService;
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
         this.applicationUserRepository = applicationUserRepository;
+        this.chatMessageSearchRepository = chatMessageSearchRepository;
     }
 
     private ApplicationUser getUser(){
@@ -120,12 +126,19 @@ public class ChatServiceImplement implements ChatService {
                         "delete")
                 );
             }
-            ChatRoom chatRoom = chatRoomRepository.findById(chatMessage.getId()).get();
+            ChatRoom chatRoom = chatRoomRepository.findById(chatMessage.getChatRoomId()).get();
             chatRoom.setSenderName(chatMessage.getSenderName());
             chatRoom.setContent("One message is deleted by " + chatMessage.getSenderName());
             chatRoom.setTimestamp(new Date().getTime());
             chatRoomRepository.save(chatRoom);
             chatMessageRepository.delete(chatMessage);
         }
+    }
+
+    @Override
+    public ResponseEntity<GeneralResponse<Object>> findChat(String roomId, int touch,String pattern){
+        if (!getUser().getChatRoomList().contains(chatRoomRepository.findById(roomId).get()))
+            ResponseFactory.error(HttpStatus.valueOf(400), ResponseStatusEnum.NOT_MESSAGE);
+        return ResponseFactory.success(chatMessageSearchRepository.findByContent(pattern,PageRequest.of(touch, 10 )));
     }
 }

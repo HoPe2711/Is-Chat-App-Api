@@ -1,10 +1,14 @@
 package com.example.chat_app_service.authen_service.service;
 
-import com.example.chat_app_service.authen_service.model.request.*;
+import com.example.chat_app_service.authen_service.model.request.ChangePasswordRequest;
+import com.example.chat_app_service.authen_service.model.request.CreateAccountRequest;
+import com.example.chat_app_service.authen_service.model.request.ForgotPasswordRequest;
+import com.example.chat_app_service.authen_service.model.request.LoginRequest;
+import com.example.chat_app_service.authen_service.model.request.ResetPasswordRequest;
+import com.example.chat_app_service.authen_service.model.request.VerifyAccountRequest;
 import com.example.chat_app_service.response.GeneralResponse;
-import org.springframework.http.ResponseEntity;
-
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
     ResponseEntity<GeneralResponse<Object>> loginAccount(LoginRequest loginRequest);

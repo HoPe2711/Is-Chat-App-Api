@@ -13,3 +13,4 @@ public class ReactMessageRequest {
     private String senderName;
     private String emotion;
 }
+  

@@ -1,7 +1,10 @@
 package com.example.chat_app_service.chat_service.socket;
 
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.SECRET;
+
 import com.example.chat_app_service.authen_service.security.filter.JWT.JwtUtils;
 import com.example.chat_app_service.authen_service.security.filter.service.UserDetailsServiceImplement;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -20,10 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-
-import java.util.Objects;
-
-import static com.example.chat_app_service.authen_service.security.SecurityConstants.SECRET;
 
 @Configuration
 @EnableWebSocketMessageBroker

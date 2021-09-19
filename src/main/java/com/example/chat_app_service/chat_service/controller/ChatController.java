@@ -44,5 +44,10 @@ public class ChatController {
         return chatService.loadChatMessage(roomId,touch);
     }
 
-
+    @GetMapping("/findChat/{roomId}/{touch}/{pattern}")
+    public ResponseEntity<GeneralResponse<Object>> findChat(@PathVariable String roomId,
+        @PathVariable int touch,
+        @PathVariable(name="pattern") String pattern) {
+        return chatService.findChat(roomId,touch,pattern);
+    }
 }

@@ -1,8 +1,8 @@
 package com.example.chat_app_service.authen_service.model.response;
 
-import lombok.Data;
-
 import static com.example.chat_app_service.authen_service.security.SecurityConstants.TOKEN_PREFIX;
+
+import lombok.Data;
 
 @Data
 public class LoginResponse {

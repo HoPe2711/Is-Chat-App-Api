@@ -2,10 +2,9 @@ package com.example.chat_app_service.chat_service.repository;
 
 import com.example.chat_app_service.authen_service.repository.entities.ApplicationUser;
 import com.example.chat_app_service.chat_service.repository.entities.ChatRoom;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.List;
 
 public interface ChatRoomRepository extends MongoRepository<ChatRoom, String> {
    List<ChatRoom> findChatRoomByUserListContainingAndRoomNameLike(ApplicationUser user,String name, Pageable pageable);

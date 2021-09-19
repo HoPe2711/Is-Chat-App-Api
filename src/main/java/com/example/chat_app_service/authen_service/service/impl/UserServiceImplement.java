@@ -1,7 +1,12 @@
 package com.example.chat_app_service.authen_service.service.impl;
 
 import com.example.chat_app_service.authen_service.mailsender.EmailService;
-import com.example.chat_app_service.authen_service.model.request.*;
+import com.example.chat_app_service.authen_service.model.request.ChangePasswordRequest;
+import com.example.chat_app_service.authen_service.model.request.CreateAccountRequest;
+import com.example.chat_app_service.authen_service.model.request.ForgotPasswordRequest;
+import com.example.chat_app_service.authen_service.model.request.LoginRequest;
+import com.example.chat_app_service.authen_service.model.request.ResetPasswordRequest;
+import com.example.chat_app_service.authen_service.model.request.VerifyAccountRequest;
 import com.example.chat_app_service.authen_service.model.response.LoginResponse;
 import com.example.chat_app_service.authen_service.redis.service.IRedisCaching;
 import com.example.chat_app_service.authen_service.repository.ApplicationUserRepository;
@@ -13,6 +18,10 @@ import com.example.chat_app_service.authen_service.service.config.ValidationServ
 import com.example.chat_app_service.response.GeneralResponse;
 import com.example.chat_app_service.response.ResponseFactory;
 import com.example.chat_app_service.response.ResponseStatusEnum;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +36,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j

@@ -1,5 +1,12 @@
 package com.example.chat_app_service.authen_service.security;
 
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.FORGOT_PASSWORD_URL;
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.LOGIN_URL;
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.LOGOUT_URL;
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.RESET_PASSWORD_URL;
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.SIGN_UP_URL;
+import static com.example.chat_app_service.authen_service.security.SecurityConstants.VERIFY_URL;
+
 import com.example.chat_app_service.authen_service.security.filter.JWT.AuthEntryPointJWT;
 import com.example.chat_app_service.authen_service.security.filter.authorization.JWTAuthorizationFilter;
 import com.example.chat_app_service.authen_service.security.filter.service.UserDetailsServiceImplement;
@@ -20,8 +27,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import static com.example.chat_app_service.authen_service.security.SecurityConstants.*;
 
 
 @Configuration
