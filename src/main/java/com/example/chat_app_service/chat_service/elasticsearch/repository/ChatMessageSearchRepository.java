@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatMessageSearchRepository extends ElasticsearchRepository<ChatMessageSearch, String> {
 
-    @Query("{\"bool\": {\"must\": [{\"match\": {\"content\": \"?0\"}},{\"match\": {\"chatRoomId\": \"?1\"}}]}}")
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"content\": {\"query\": \"?0\",\"fuzziness\": \"1\"}}},{\"match\": {\"chatRoomId\": \"?1\"}}]}}")
     List<ChatMessageSearch> findByContent(String content, String chatRoomId,Pageable pageable);
 }

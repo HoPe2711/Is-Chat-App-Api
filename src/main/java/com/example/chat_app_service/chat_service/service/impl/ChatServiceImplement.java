@@ -137,8 +137,15 @@ public class ChatServiceImplement implements ChatService {
 
     @Override
     public ResponseEntity<GeneralResponse<Object>> findChat(String roomId, int touch,String pattern){
-        if (!getUser().getChatRoomList().contains(chatRoomRepository.findById(roomId).get()))
-            ResponseFactory.error(HttpStatus.valueOf(400), ResponseStatusEnum.NOT_MESSAGE);
-        return ResponseFactory.success(chatMessageSearchRepository.findByContent(pattern,roomId,PageRequest.of(touch, 10 )));
+        if (chatRoomRepository.findById(roomId).isPresent()) {
+            if (!getUser().getChatRoomList().contains(chatRoomRepository.findById(roomId).get())) {
+                return ResponseFactory
+                    .error(HttpStatus.valueOf(400), ResponseStatusEnum.NOT_MESSAGE);
+            }
+            return ResponseFactory.success(chatMessageSearchRepository
+                .findByContent(pattern, roomId, PageRequest.of(touch, 10)));
+        } else {
+            return ResponseFactory.error(HttpStatus.valueOf(400), ResponseStatusEnum.ROOM_EXIST);
+        }
     }
 }
